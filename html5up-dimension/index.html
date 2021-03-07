@@ -6,7 +6,46 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+		<script><link rel="stylesheet" href="assets/css/noscript.css" /></script>
+
+		<!-- jQuery library -->
+		<script src="assets/js/jquery.min.js"></script>
+
+		<!-- Google Maps JS library -->
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAe2uLVMvaWQKid8tSAjb09UgRIxLjc918"></script>
+
+		<!-- place search API Google library -->
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAe2uLVMvaWQKid8tSAjb09UgRIxLjc918&libraries=places"></script>
+
+		<script>
+		var searchInput = 'search_input';
+		$(document).ready(function () {
+    		var autocomplete;
+    		autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+        		types: ['geocode'],
+    		});
+
+    		google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        		var near_place = autocomplete.getPlace();
+        		document.getElementById('loc_lat').value = near_place.geometry.location.lat();
+        		document.getElementById('loc_long').value = near_place.geometry.location.lng();
+
+        		document.getElementById('latitude_view').innerHTML = near_place.geometry.location.lat();
+        		document.getElementById('longitude_view').innerHTML = near_place.geometry.location.lng();
+    		});
+		});
+
+				$(document).on('change', '#'+searchInput, function () {
+    				document.getElementById('latitude_input').value = '';
+    				document.getElementById('longitude_input').value = '';
+
+    				document.getElementById('latitude_view').innerHTML = '';
+    				document.getElementById('longitude_view').innerHTML = '';
+				});
+		</script>
+
 	</head>
 	<body class="is-preload">
 
@@ -18,18 +57,62 @@
 						<div class="logo">
 							<span class="icon fa-gem"></span>
 						</div>
+						<button type="submit" style="width:auto;"><a href="Login.html">Login</a></button>
+
+
 						<div class="content">
 							<div class="inner">
-								<h1>Search your favorite hang out</h1>
-								<p>Overwhelmed by Google search results? Try our website to get the most accurate <br>
+								<h1>Search for Local Places near you!</h1>
+								<p>Overwhelmed by Google search results? Want to support your local community? Try Guide Galileo to get the most accurate <br>
 								and authentic reviews from our locals. Let's go local!!! </p>
 							</div>
-							<div class = "searchBar">
-								<form action="#">
-									<input type="text" placeholder="Search..." name="search">
-									<button type="submit">Submit</button>
-								</form>
+							<!-- Autocomplete location search input -->
+							<div class="form-group">
+    							<label>Search for Local Places</label>
+    							<input type="text" class="form-control" id="search_input" placeholder="Your Places" />
+    							<input type="hidden" id="loc_lat" />
+    							<input type="hidden" id="loc_long" />
+								<button type="submit" onclick="showResults()">Submit</button>
+								<button id = "find-me" type="submit" onclick="showResults()">My Location</button>
+								<p id="demo"></p>
+								<p id = "status"></p>
+							  <a id = "map-link" target="_blank"></a>
+								<script>
+									function showResults() {
+										//document.getElementById("demo").innerHTML = "Coming Soon...";// body...
+										const status = document.querySelector('#status');
+									  const mapLink = document.querySelector('#map-link');
+
+									  mapLink.href = '';
+									  mapLink.textContent = '';
+
+									  function success(position) {
+									    const latitude  = position.coords.latitude;
+									    const longitude = position.coords.longitude;
+
+									    status.textContent = '';
+									    mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+									  }
+
+									  function error() {
+									    status.textContent = 'Unable to retrieve your location';
+									  }
+
+									  if(!navigator.geolocation) {
+									    status.textContent = 'Geolocation is not supported by your browser';
+									  } else {
+									    status.textContent = 'Locating…';
+									    navigator.geolocation.getCurrentPosition(success, error);
+											$.get("http://maps.googleapis.com/geocode/json?latlng-"+latitude+","+longitude+"&sensor-false",function(data){
+												console.log(data);
+											})
+									  }
+
+									}
+									document.querySelector('#find-me').addEventListener('click', geoFindMe);
+								</script>
 							</div>
+
 						</div>
 						<nav>
 							<ul>
@@ -37,7 +120,6 @@
 								<li><a href="#work">Work</a></li>
 								<li><a href="#about">About Us</a></li>
 								<li><a href="#contact">Reviews</a></li>
-								<!--<li><a href="#elements">Elements</a></li>-->
 							</ul>
 						</nav>
 					</header>
@@ -49,8 +131,11 @@
 							<article id="intro">
 								<h2 class="major">Intro</h2>
 								<span class="image main"><img src="images/pic01.jpg" alt="" /></span>
-								<p>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet egestas mauris. Ut magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas. By the way, check out my <a href="#work">awesome work</a>.</p>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula.</p>
+								<p>Welcome to Guide Galileo! </p>
+
+								<p>Been in situtation where you couldn't find accurate information on place you want to go? Let down your worry since you're being guided by Guide Galileo's state-of-the-art search and filter systems. We directly connect with Local Buinesesses and all our reviews are mostly local which will provide an accurate information of what to expect on your trip</p>
+
+								<p>We are missioned to promote indigenous business, shed light on historical significance, frugal living cost and a lot more. Please click on <a href="#work">Our Work</a> to find more information about our exciting work.</p>
 							</article>
 
 						<!-- Work -->
@@ -65,10 +150,10 @@
 							<article id="about">
 								<h2 class="major">About Us</h2>
 								<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
-								<p>Lorem ipsum dolor sit amet, consectetur et adipiscing elit. Praesent eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent urna nisi, fringila lorem et vehicula lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices. Aliquam libero et malesuada fames ac ante ipsum primis in faucibus. Cras viverra ligula sit amet ex mollis mattis lorem ipsum dolor sit amet.</p>
+								<p>We started Guide Galileo as a fun project during our senior year. However, as we learnt more about the significance of Local business and their impace on a community; we decided to promote local business since they often go unnoticed if not marketed properly. And most of Local business runs on word of mouth or the owners cannot simply afford to bear the expensive cost of Marketing. In order to generate income and promote Indigenous businesses and local heritage sites, we as a group came up with an idea to filter raw information provided by Google and only show authentic and highly reviewed results</p>
 							</article>
 
-						<!-- Contact -->
+						<!-- Reviews -->
 							<article id="contact">
 								<h2 class="major">Reviews</h2>
 								<form method="post" action="#">
@@ -359,6 +444,5 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-
 	</body>
 </html>
