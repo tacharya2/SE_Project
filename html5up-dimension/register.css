@@ -8,7 +8,7 @@ margin-right: auto;
 padding-right: 245px;
 padding-left: 245px;
 background-color: azure;
-border: 10px, solid,#4CAF50;
+
 }
 h1, p{
   text-align: center;
@@ -19,6 +19,27 @@ color: #ddd;
 }
 p{
   color: chocolate;
+}
+
+
+#subcontainer{
+  background-color: #e7e2e5;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9; 
+  align-items: center;
+  height: 100%;
+
+}
+
+#submit{
+  background-color: #4CAF50;
+  align-items: center;
+}
+#cancel{
+  background-color: yellow;
 }
 
 /* Full-width input fields */

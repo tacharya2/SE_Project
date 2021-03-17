@@ -4,32 +4,37 @@
 
   <title> Login Page</title>
 
-  <style type="text/css">
-
-  </style>
+<link rel="stylesheet" href="register.css">
 </head>
 <body>
+<div id = "container">
+
   <form action="login.php" method="post">
 
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="user_name" required>
+    
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="pass_word" required>
+    
+    <div id="subcontainer">
+      <button type="submit" id="submit">Login</button><br>
+     
+      <input type="checkbox" checked="checked" name="remember" id="remember">Remember me <br>
+    
+      <button type="button" class="cancelbtn" id="cancel">Cancel</button><br>
+      <a href="#">Forgot User id?</a><br>
+      <a href="#">Forgot Password?</a>
+    </div>
 
-<label for="uname"><b>Username</b></label>
-<input type="text" placeholder="Enter Username" name="user_name" required>
-
-<label for="psw"><b>Password</b></label>
-<input type="password" placeholder="Enter Password" name="pass_word" required>
-
-<button type="submit">Login</button>
-<label>
-<input type="checkbox" checked="checked" name="remember"> Remember me
-</label>
-</div>
-<div class="container" style="background-color:#f1f1f1">
-    <button type="button" class="cancelbtn">Cancel</button>
-    <span class="psw">Forgot <a href="#">password?</a></span>
     <!-- Link to registration -->
-    <p>Don't have an acount, create one</p>
-    <a href="register.html">Register an Account</a>
-  </div>
-</form>
+    <p>Don't have an acount? Create one</p>
+     <p> <a href="register.html">Create an Account</a>
+    </p>
+    
+  
+    </form>
+
+</div>
 </body>
 </html>
